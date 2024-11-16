@@ -1,0 +1,71 @@
+1) a) Write A Shell Program of Hello World 
+
+$ vim experimenttwo.sh
+Lakshay@Lenovo-M ~
+
+echo hello world
+
+$ sh experimenttwo.sh
+hello world
+
+
+2) b) Write a shell program to find factorial of a number. 
+
+vim factorial.sh
+
+#!/bin/bash
+echo "Enter a number:"
+read num
+factorial=1 for (i=2; i<=num; i++ ))
+do
+factorial=$((factorial * i))
+done
+echo "Factorial of $num is $factorial"
+
+~
+~
+~
+~
+INSERT
+Esc
+:wq
+
+Output --> $sh factorial.sh
+           Enter a number:
+           5
+           Fatctorial of 5 is 120
+
+3)  c) Write a shell program to find gross salary of an employee. 
+
+
+vim grosssalary.sh
+
+#!/bin/bash
+echo "enter the salary"
+read s
+da=$(echo "$s* 0.10" | bc)
+hra=(echo "$s* 0.20" | bc)
+gross=$(echo "$s +$da +%hra" (bc)
+echo "salary: $s"
+echo "DA: $da"
+echo "HRA: $hra"
+echo "gross salary is $gross"
+~
+~
+~
+~
+INSERT
+Esc
+:wq
+
+Output --> vim grosssalary.sh
+
+           $ sh grosssalary.sh
+           gross salary
+           enter the salary
+           10000
+           salary: 10000
+           DA: 1000.00
+           HRA: 2000.00
+           gross salary is 13000.00
+

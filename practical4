@@ -1,0 +1,155 @@
+1)  a) Write a shell program to check whether a number is even or odd
+
+$ vim oddeven.sh
+
+echo
+echo This is program to check whether a number is even or odd
+#!/bin/bash
+echo "Enter a number:"
+read num
+if [ $((num % 2)) -eq 0 ]
+then
+  echo "$num is even."
+else
+  echo "$num is odd."
+fi
+
+Output --> $ vim oddeven.sh
+           $ sh oddeven.sh
+           This is program to find whether a number is even or odd Enter a number:
+           544
+           544 is even.
+            
+           $ sh oddeven.sh
+           This is program to find whether a number is even or odd Enter a number:
+           9999
+           9999 is odd.
+
+
+
+
+
+2)  b) Write a shell program to find whether a number is prime or not.
+
+$ vim primeornot.sh
+
+echo
+echo echo This is program to find whether a number is prime or not
+#!/bin/bash
+echo "Enter a number:"
+read num
+is_prime=1
+for ((i=2; i<=num/2; i++))
+do
+  if [ $((num % i)) -eq 0 ]
+  then
+    is_prime=0
+    break
+  fi
+done
+
+if [ $is_prime -eq 1 ]
+then
+  echo "$num is a prime number."
+else
+  echo "$num is not a prime number."
+fi
+
+Output --> $ vim primeornot.sh
+           $ sh primeornot.sh
+           This is a program to find whether a number is prime or not. Enter a number:
+           17
+           17 is a prime number.
+            
+            
+           $ sh primeornot.sh
+           This is a program to find whether a number is prime or not.
+           Enter a number:
+           45
+           45 is not a prime number.
+
+
+
+
+3)  c) Write a shell program to find whether a number is palindrome or not.
+
+
+echo 
+echo This is program to find whether a number is palindrome or not
+#!/bin/bash
+echo "Enter a number:"
+read num
+reverse=0
+original_num=$num
+
+while [ $num -gt 0 ]
+do
+  remainder=$((num % 10))
+  reverse=$((reverse * 10 + remainder))
+  num=$((num / 10))
+done
+
+if [ $original_num -eq $reverse ]
+then
+  echo "$original_num is a palindrome."
+else
+  echo "$original_num is not a palindrome."
+fi
+
+Output --> $sh palindromeornot.sh
+           This is a program to find whether a number is palindrome or not.
+           Enter a number:
+           45354
+           45354 is a palindrome.
+            
+            
+           $sh palindromeornot.sh
+           This is a program to find whether a number is palindrome or not.
+           Enter a number:
+           453
+           453 is not a palindrome.
+
+
+
+
+4)  d) Write a shell program to type number 1 to 7 and then print its corresponding day of week
+
+$ vim weekday.sh
+
+echo
+echo This is program to type number 1 to 7 and then print its corresponding day of week
+#!/bin/bash
+echo "Enter a number (1-7):"
+read num
+
+case $num in
+  1) echo "Monday" ;;
+  2) echo "Tuesday" ;;
+  3) echo "Wednesday" ;;
+  4) echo "Thursday" ;;
+  5) echo "Friday" ;;
+  6) echo "Saturday" ;;
+  7) echo "Sunday" ;;
+  *) echo "Invalid input! Please enter a number between 1 and 7." ;;
+esac
+
+Output --> $ vim weekday.sh
+           $ sh weekday.sh
+           This is a program to type number 1 to 7 and then print its corresponding day of week
+           Enter a number from 1 to 7:
+           1
+           Monday
+            
+            
+           $ sh weekday.sh
+           This is a program to type number 1 to 7 and then print its corresponding day of week
+           Enter a number from 1 to 7:
+           7 Sunday
+            
+            
+           $ sh weekday.sh
+           This is a program to type number 1 to 7 and then print its corresponding day of week
+           Enter a number from 1 to 7:
+           8
+           Invalid input! Please enter a number between 1 and 7.
+

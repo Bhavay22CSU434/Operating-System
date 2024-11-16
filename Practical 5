@@ -1,0 +1,83 @@
+Practical 5 
+
+Implement the following CPU scheduling Algorithms.
+i)	FCFS with Arrival time
+ii)	FCFS without Arrival time
+
+
+#include<iostream>
+using namespace std;
+// Function to find completion, turn around, and waiting time
+void findTimes (int processes[], int n, int at[], int bt[], int ct[], int tat[], int wt[]) {
+int currentTime = 0;
+// Calculating completion time
+for
+(int i=0; i < n; i++) {
+if (currentTime < at[i]) { // If the current time is less than arrival time, wait
+currentTime at[i];
+}
+ct[i] = currentTime+ bt[i]; // Completion time current time + burst time
+currentTime ct[i];
+// Update current time
+// Calculating turnaround time and waiting time
+tat[i] = ct[i] at[i];
+// Turnaround time completion time arrival time
+wt[i] = tat[i]bt[i];
+// Waiting time turnaround time burst time
+}
+}
+// Function to print all times and calculate average times
+void findavgTime(int processes[], int n, int at [], int bt[]) {
+int ct[n], tat[n], wt[n];
+int total_tate, total_wt = 8;
+findTimes (processes, n, at, bt, ct, tat, wt); // Calculate times
+// Display results
+cout << "Processes Arrival Time Burst Time Completion Time Turnaround Time Waiting Time\n";
+for (int i = 0; i < n; i++) {
+total_tat + tat[i];
+total_wt + wt[i];
+cout <<<<<< "<<< processes[i] << "\t\t" << at[i] << "\t\t" << bt[i] << "\t\t"
+<<<<< ct[i] <<<<"\t\t" << tat[i] << "\t\t\t" << wt[i] << endl;
+}
+
+cout << "\nAverage Turnaround Time = <<<<< (float)total_tat (float)n; cout << "\nAverage Waiting Time = " << (float)total_wt (float)n;
+}
+int main() {
+int n;
+cout << "Enter number of processes: ";
+cin >> n;
+int processes [n], at[n], bt[n];
+// Taking input for arrival time and burst time
+for (int i=0; i < n; i++) {
+processes[i] = i + 1;
+cout << "Enter arrival time and burst time for process"<<< processes[i] << ": ";
+cin >> at[i] >> bt[i];
+}
+// Calculate average time and other metrics
+findavgTime (processes, n, at, bt);
+return 0;
+}
+
+
+Output -->
+
+Enter number of processes: 4
+Enter arrival time and burst time for process 1: 0  2
+
+Enter arrival time and burst time for process 2: 1  2
+
+Enter arrival time and burst time for process 3: 5  3
+
+Enter arrival time and burst time for process 4: 6  4
+
+
+Processes  Arrival Time   Burst Time    Completion Time      Turnaround Time        Waiting Time
+
+1                0            2                  2                2                      0
+2                1            2                  4                3                      1
+3                5            3                  8                3                      0
+4                6            4                  12               6                      2
+
+
+Average Turnaround Time = 3.5
+Average Waiting Time = 0.75

@@ -1,0 +1,105 @@
+1) a) Write a shell program to find Fibonacci series.
+
+$ vim fibonacciseries.sh
+#!/bin/bash
+echo "Enter the number of terms:"
+read n
+a=0
+b=1
+echo "The Fibonacci series is:"
+for (( i=0; i<n; i++ ))
+do
+    echo -n "$a "
+    fn=$((a + b))
+    a=$b
+    b=$fn
+done
+echo
+
+Output --> $ vim fibonacciseries.sh
+           $sh fibonacciseries.sh
+           This is program for fibonacci series
+           Enter the number of terms:
+           10
+           The Fibonacci series is:
+           0 1 1 2 3 5 8 13 21 34
+           
+
+2) b) Write a shell program to find largest of three numbers.
+
+
+$ vim largestamongthreenumbers.sh
+
+#!/bin/bash
+echo "Enter three numbers:"
+read a b c
+if [ $a -gt $b ] && [ $a -gt $c ]; then
+    echo "$a is the largest number."
+elif [ $b -gt $a ] && [ $b -gt $c ]; then
+    echo "$b is the largest number."
+else
+    echo "$c is the largest number."
+fi
+
+Output --> $ vim largestamongthreenumbers.sh
+           Lakshay@Lenovo-M ~
+           $sh largestamong threenumbers.sh
+           This is a program to find largest among three numbers.
+           Enter three numbers:
+           7 18 45
+           45 is the largest number.
+
+           
+           $ vim largestamong threenumbers.sh
+           $sh largestamong threenumbers.sh
+           This is a program to find largest among three numbers.
+           Enter three numbers:
+           45 15 77
+           77 is the largest number.
+
+3) c) Write a shell program to find average of N numbers
+
+$ vim averageofNnumbers.sh
+
+echo This is program to find average of N numbers
+#!/bin/bash
+echo "Enter the number of elements:"
+read n
+sum=0
+echo "Enter the numbers of terms for which yoy want the average:"
+for (( i=0; i<n; i++ ))
+do
+    read num
+    sum=$((sum + num))
+done
+average=$(echo "scale=2; $sum / $n" | bc)
+echo "The average of the given number is $average"
+
+Output --> $ vim averageofNnumbers.sh
+           $ sh averageofNnumbers.sh
+           This is program to find average of N numbers
+           Enter the number for which you want the average:
+           5
+           Enter the numbers:
+           5
+           10
+           15
+           20
+           25
+           The average of the given numbers is 15.00
+
+           
+           $ vim averageofNnumbers.sh
+           $sh averageofNnumbers.sh
+           This is program to find average of N numbers
+           Enter the number of terms for which you want the average:
+           5
+           Enter the numbers:
+           5
+           10
+           15
+           20
+           25
+           The average of the given numbers is 15.0
+
+      

@@ -1,0 +1,81 @@
+Priority Scheduling
+
+
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.Comparator;
+
+class Process 
+{
+    int pid;         // Process ID
+    int arrivalTime; // Arrival Time
+    int burstTime;   // Burst Time
+    int priority;    // Priority (lower number = higher priority)
+    int completionTime; // Completion Time
+    int turnAroundTime; // Turnaround Time
+    int waitingTime;    // Waiting Time
+}
+
+public class PriorityScheduling 
+{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        // Input number of processes
+        System.out.print("Enter number of processes: ");
+        int n = sc.nextInt();
+        
+        Process[] processes = new Process[n];
+        
+        // Input arrival times, burst times, and priorities for each process
+        for (int i = 0; i < n; i++) {
+            processes[i] = new Process();
+            processes[i].pid = i + 1;
+            System.out.print("Enter Arrival Time for Process " + (i + 1) + ": ");
+            processes[i].arrivalTime = sc.nextInt();
+            System.out.print("Enter Burst Time for Process " + (i + 1) + ": ");
+            processes[i].burstTime = sc.nextInt();
+            System.out.print("Enter Priority for Process " + (i + 1) + " (lower number = higher priority): ");
+            processes[i].priority = sc.nextInt();
+        }
+        
+        // Sort processes by Arrival Time first and then by Priority (Non-Preemptive)
+        Arrays.sort(processes, Comparator.comparingInt((Process p) -> p.arrivalTime)
+                                          .thenComparingInt(p -> p.priority));
+        
+        int currentTime = 0;
+        float totalTAT = 0, totalWT = 0;
+        
+        // Priority Scheduling Logic (Non-Preemptive)
+        for (Process p : processes) {
+            // If the process arrives after the current time, move current time to the arrival time of this process
+            if (currentTime < p.arrivalTime) {
+                currentTime = p.arrivalTime;
+            }
+            
+            // Calculate Completion Time, Turnaround Time, and Waiting Time
+            p.completionTime = currentTime + p.burstTime;
+            p.turnAroundTime = p.completionTime - p.arrivalTime;
+            p.waitingTime = p.turnAroundTime - p.burstTime;
+            
+            // Update the current time to the completion time of the current process
+            currentTime = p.completionTime;
+            
+            // Accumulate TAT and WT for averages
+            totalTAT += p.turnAroundTime;
+            totalWT += p.waitingTime;
+        }
+        
+        // Display process details and averages
+        System.out.println("\nProcess\tAT\tBT\tPriority\tCT\tTAT\tWT");
+        for (Process p : processes) {
+            System.out.printf("%d\t%d\t%d\t%d\t\t%d\t%d\t%d\n", 
+                p.pid, p.arrivalTime, p.burstTime, p.priority, p.completionTime, p.turnAroundTime, p.waitingTime);
+        }
+        
+        System.out.printf("\nAverage Turnaround Time: %.2f\n", totalTAT / n);
+        System.out.printf("Average Waiting Time: %.2f\n", totalWT / n);
+        
+        sc.close();
+    }
+}

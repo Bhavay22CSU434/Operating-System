@@ -1,0 +1,102 @@
+Round Robin
+
+
+import java.util.Scanner;
+
+class Process 
+{
+    int pid;         // Process ID
+    int arrivalTime; // Arrival Time
+    int burstTime;   // Burst Time
+    int remainingTime; // Remaining Burst Time
+    int completionTime; // Completion Time
+    int turnAroundTime; // Turnaround Time
+    int waitingTime;    // Waiting Time
+}
+
+public class RoundRobinScheduler 
+{
+    public static void main(String[] args) 
+    {
+        Scanner sc = new Scanner(System.in);
+        
+        // Input number of processes
+        System.out.print("Enter number of processes: ");
+        int n = sc.nextInt();
+        
+        Process[] processes = new Process[n];
+        
+        // Input arrival times and burst times for each process
+        for (int i = 0; i < n; i++) 
+        {
+            processes[i] = new Process();
+            processes[i].pid = i + 1;
+            System.out.print("Enter Arrival Time for Process " + (i + 1) + ": ");
+            processes[i].arrivalTime = sc.nextInt();
+            System.out.print("Enter Burst Time for Process " + (i + 1) + ": ");
+            processes[i].burstTime = sc.nextInt();
+            processes[i].remainingTime = processes[i].burstTime;
+        }
+        
+        // Input time quantum
+        System.out.print("Enter Time Quantum: ");
+        int quantum = sc.nextInt();
+        
+        // Initialize variables for calculation
+        int currentTime = 0;
+        int completed = 0;
+        float totalTAT = 0, totalWT = 0;
+        
+        // Round Robin Scheduling
+        while (completed < n) 
+        {
+            boolean allIdle = true; // flag to check if all processes are idle
+            
+            for (Process p : processes) 
+            {
+                if (p.remainingTime > 0 && p.arrivalTime <= currentTime) 
+                {
+                    allIdle = false; // Process is ready to execute
+                    
+                    if (p.remainingTime > quantum) 
+                    {
+                        currentTime += quantum;
+                        p.remainingTime -= quantum;
+                    } 
+                    else 
+                    {
+                        currentTime += p.remainingTime;
+                        p.remainingTime = 0;
+                        p.completionTime = currentTime;
+                        p.turnAroundTime = p.completionTime - p.arrivalTime;
+                        p.waitingTime = p.turnAroundTime - p.burstTime;
+                        
+                        totalTAT += p.turnAroundTime;
+                        totalWT += p.waitingTime;
+                        completed++;
+                    }
+                }
+            }
+            
+            // If all processes are idle, increment time to avoid infinite loop
+            if (allIdle) 
+            {
+                currentTime++;
+            }
+        }
+        
+        // Display process details and averages
+        System.out.println("\nProcess\tAT\tBT\tCT\tTAT\tWT");
+        for (Process p : processes) 
+        {
+            System.out.printf("%d\t%d\t%d\t%d\t%d\t%d\n", 
+                p.pid, p.arrivalTime, p.burstTime, p.completionTime, p.turnAroundTime, p.waitingTime);
+        }
+        
+        System.out.printf("\nAverage Turnaround Time: %.2f\n", totalTAT / n);
+        System.out.printf("Average Waiting Time: %.2f\n", totalWT / n);
+        
+        sc.close();
+    }
+}
+

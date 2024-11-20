@@ -5,6 +5,11 @@ i)	FCFS with Arrival time
 ii)	FCFS without Arrival time
 
 
+
+i)	FCFS with Arrival time
+
+
+
 #include<iostream>
 using namespace std;
 // Function to find completion, turn around, and waiting time
@@ -81,3 +86,83 @@ Processes  Arrival Time   Burst Time    Completion Time      Turnaround Time    
 
 Average Turnaround Time = 3.5
 Average Waiting Time = 0.75
+
+
+
+
+ii)	FCFS without Arrival time
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct Process {
+    int id;         // Process ID
+    int burstTime;  // Burst Time
+    int completionTime; // Completion Time
+    int turnAroundTime; // Turnaround Time
+    int waitingTime;    // Waiting Time
+};
+
+int main() {
+    int n;
+    cout << "Enter the number of processes: ";
+    cin >> n;
+
+    vector<Process> processes(n);
+
+    // Input Burst Time for each process
+    for (int i = 0; i < n; i++) {
+        processes[i].id = i + 1;
+        cout << "Enter Burst Time for Process " << processes[i].id << ": ";
+        cin >> processes[i].burstTime;
+    }
+
+    // Calculating CT, TAT, and WT
+    int currentTime = 0;
+    double totalTAT = 0, totalWT = 0;
+
+    for (int i = 0; i < n; i++) {
+        processes[i].completionTime = currentTime + processes[i].burstTime;
+        currentTime = processes[i].completionTime;
+
+        processes[i].turnAroundTime = processes[i].completionTime;
+        processes[i].waitingTime = processes[i].turnAroundTime - processes[i].burstTime;
+
+        totalTAT += processes[i].turnAroundTime;
+        totalWT += processes[i].waitingTime;
+    }
+
+    // Display Results
+    cout << "\nProcess\tBT\tCT\tTAT\tWT\n";
+    for (const auto &p : processes) {
+        cout << "P" << p.id << "\t" 
+             << p.burstTime << "\t" 
+             << p.completionTime << "\t" 
+             << p.turnAroundTime << "\t" 
+             << p.waitingTime << "\n";
+    }
+
+    // Display Averages
+    cout << "\nAverage Turnaround Time: " << totalTAT / n << endl;
+    cout << "Average Waiting Time: " << totalWT / n << endl;
+
+    return 0;
+}
+
+
+
+Output --> Enter the number of processes: 4
+           Enter Burst Time for Process 1: 6
+           Enter Burst Time for Process 2: 8
+           Enter Burst Time for Process 3: 7
+           Enter Burst Time for Process 4: 3
+            
+           Process BT      CT      TAT     WT
+           P1      6       6       6       0
+           P2      8       14      14      6
+           P3      7       21      21      14
+           P4      3       24      24      21
+            
+           Average Turnaround Time: 16.25
+           Average Waiting Time: 10.25

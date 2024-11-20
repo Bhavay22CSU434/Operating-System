@@ -1,0 +1,215 @@
+Practical - 6
+
+i) SJF
+
+import java.util.Scanner;
+class Process 
+{
+      int pid, at, bt, ct, tat, wt;
+}
+public class SJF_NonPreemptive 
+{
+      public static void main(String[] args) 
+{
+      Scanner sc = new Scanner(System.in);
+      System.out.print("Enter the number of processes: ");
+      int n = sc.nextInt();
+      Process[] processes new Process[n]; =
+      for (int i = 0; i < n; i++) {
+      processes[i] new Process(); =
+      processes[i].pid = i + 1; System.out.print("Enter Arrival Time and Burst Time for process + (i + 1) + ": "); processes[i].at sc.nextInt(); = processes[i].bt = sc.nextInt();
+}
+      calculateTimes (processes, n);
+      sc.close();
+}
+
+static void calculateTimes (Process [] p, int n) 
+{
+      int currentTime = 0, completed = 0;
+      boolean[] isCompleted = new boolean[n];
+      float totalTAT = 0, totalwT = 0;
+      while (completed != n) 
+{
+      int minIndex = -1;
+      int minBurst = Integer.MAX_VALUE;
+      // Select the process with minimum burst time
+      for (int i = 0; i < n; i++) 
+{
+      if (p[i].at <= currentTime && !isCompleted[i]
+      && p[i].bt < minBurst) 
+{
+minBurst = p[i].bt;
+minIndex = i;
+}
+}
+      if (minIndex == -1) 
+{
+      currentTime++;
+} else 
+{
+      currentTime += p[minIndex].bt;
+      p[minIndex].ct = currentTime;
+      p[minIndex].tat p[minIndex].ct p[minIndex] = - .at;
+      p[minIndex].wt = p[minIndex].tat .bt; - p[minIndex]
+      totalTAT += p[minIndex].tat;
+      totalWT += p[minIndex].wt;
+      isCompleted[minIndex] = true:
+      completed++;
+}
+}
+
+        printResults(p, n, totalTAT, totalWT);
+}
+        static void printResults (Process [] p, int n, float totalTAT ,float totalWT) 
+{
+        System.out.println("\nProcess\tAT\tBT\tCT\tTAT\tWT"); for (int i = 0; i < n; i++) 
+{
+        System.out.println("P" + p[i].pid + "\t" + p[i].at+ "\t" + p[i].bt + "\t" + p[i].ct + "\t" + p[i].tat + "\t" + p[i].wt);
+}
+
+        System. System.out.println("Average Turnaround Time: totalTAT / n); 11
+        System.out.println("Average Waiting Time: n); + totalwT /
+}
+}
+
+Output --> - java-cp /tmp/SETfyFRkrp/SJF_NonPreemptive
+
+            Enter the number of processes: 5
+            Enter Arrival Time and Burst Time for process 1: 2  6
+            Enter Arrival Time and Burst Time for process 2: 5  2
+            Enter Arrival Time and Burst Time for process 3: 1  8
+            Enter Arrival Time and Burst Time for process 4: 0  3
+            Enter Arrival Time and Burst Time for process 5: 4  4
+            
+            
+            Process     AT       BT       CT     TAT      WT
+            P1          2        6        9       7        1
+            P2          5        2        11      6        4
+            P3          1        8        23      22      14
+            P4          0        3         3      3        0
+            P5          4        4        15      11       7
+            
+            Average Turnaround Time: 9.8
+            Average Waiting Time: 5.2
+            === Code Execution Successful
+
+ii) SRTF
+
+import java.util.Scanner;
+
+public class SRTF {
+
+    static class Process {
+        int pid; // Process ID
+        int arrivalTime; // Arrival Time
+        int burstTime; // Burst Time
+        int remainingTime; // Remaining Burst Time
+        int completionTime; // Completion Time
+        int waitingTime; // Waiting Time
+        int turnAroundTime; // Turn Around Time
+        
+        Process(int pid, int arrivalTime, int burstTime) {
+            this.pid = pid;
+            this.arrivalTime = arrivalTime;
+            this.burstTime = burstTime;
+            this.remainingTime = burstTime; // Initially, remaining time is same as burst time
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input the number of processes
+        System.out.print("Enter number of processes: ");
+        int n = sc.nextInt();
+
+        Process[] processes = new Process[n];
+
+        // Input process details
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter arrival time and burst time for process " + (i + 1) + ": ");
+            int arrivalTime = sc.nextInt();
+            int burstTime = sc.nextInt();
+            processes[i] = new Process(i + 1, arrivalTime, burstTime);
+        }
+
+        // Variables to keep track of time and completed processes
+        int currentTime = 0, completed = 0;
+        int totalWaitingTime = 0, totalTurnAroundTime = 0;
+        Process currentProcess = null;
+
+        while (completed != n) {
+            // Select the process with the shortest remaining time among those that have arrived
+            int idx = -1;
+            int minRemainingTime = Integer.MAX_VALUE;
+
+            for (int i = 0; i < n; i++) {
+                if (processes[i].arrivalTime <= currentTime && processes[i].remainingTime > 0) {
+                    if (processes[i].remainingTime < minRemainingTime) {
+                        minRemainingTime = processes[i].remainingTime;
+                        idx = i;
+                    }
+                }
+            }
+
+            if (idx != -1) {
+                currentProcess = processes[idx];
+                currentProcess.remainingTime--;
+                currentTime++;
+
+                // If process is finished
+                if (currentProcess.remainingTime == 0) {
+                    completed++;
+                    currentProcess.completionTime = currentTime;
+                    currentProcess.turnAroundTime = currentProcess.completionTime - currentProcess.arrivalTime;
+                    currentProcess.waitingTime = currentProcess.turnAroundTime - currentProcess.burstTime;
+
+                    totalWaitingTime += currentProcess.waitingTime;
+                    totalTurnAroundTime += currentProcess.turnAroundTime;
+                }
+            } else {
+                // If no process has arrived yet, advance time
+                currentTime++;
+            }
+        }
+
+        // Print process details
+        System.out.println("\nProcess ID\tArrival Time\tBurst Time\tWaiting Time\tTurn Around Time");
+        for (Process p : processes) {
+            System.out.println(p.pid + "\t\t" + p.arrivalTime + "\t\t" + p.burstTime + "\t\t" + p.waitingTime + "\t\t" + p.turnAroundTime);
+        }
+
+        // Print average waiting time and turn around time
+        System.out.println("\nAverage Waiting Time: " + (float) totalWaitingTime / n);
+        System.out.println("Average Turn Around Time: " + (float) totalTurnAroundTime / n);
+
+        sc.close();
+    }
+}
+
+Output --> Enter number of processes: 5
+           Enter arrival time and burst time for process 1: 
+           2
+           6
+           Enter arrival time and burst time for process 2: 
+           5
+           2
+           Enter arrival time and burst time for process 3: 
+           1
+           8
+           Enter arrival time and burst time for process 4: 
+           0
+           3
+           Enter arrival time and burst time for process 5: 
+           4
+           4
+            
+           Process ID      Arrival Time    Burst Time      Waiting Time    Turn Around Time
+              1               2               6               7               13
+              2               5               2               0               2
+              3               1               8               14              22
+              4               0               3               0               3
+              5               4               4               2               6
+            
+           Average Waiting Time: 4.6
+           Average Turn Around Time: 9.2

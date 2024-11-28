@@ -1,0 +1,155 @@
+Write a program to implement Banker’s algorithm for deadlock avoidance.
+
+
+
+import java.util.Scanner;
+
+public class bankers_algo {
+    private int numberOfProcesses; // Number of processes
+    private int numberOfResources; // Number of resources
+    private int[][] allocationMatrix; 
+    private int[][] maximumMatrix; 
+    private int[][] needMatrix; 
+    private int[] availableResources; 
+    private int[] safeSequence; 
+
+    // Initialize matrices and inputs
+    private void initialize() {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input number of processes and resources
+        System.out.print("Enter number of processes: ");
+        numberOfProcesses = scanner.nextInt();
+
+        System.out.print("Enter number of resources: ");
+        numberOfResources = scanner.nextInt();
+
+        allocationMatrix = new int[numberOfProcesses][numberOfResources];
+        maximumMatrix = new int[numberOfProcesses][numberOfResources];
+        needMatrix = new int[numberOfProcesses][numberOfResources];
+        availableResources = new int[numberOfResources];
+        safeSequence = new int[numberOfProcesses];
+
+        // Input allocation matrix
+        System.out.println("Enter Allocation Matrix:");
+        for (int process = 0; process < numberOfProcesses; process++) {
+            System.out.print("Process P" + process + ": ");
+            for (int resource = 0; resource < numberOfResources; resource++) {
+                allocationMatrix[process][resource] = scanner.nextInt();
+            }
+        }
+
+        // Input maximum demand matrix
+        System.out.println("Enter Maximum Matrix:");
+        for (int process = 0; process < numberOfProcesses; process++) {
+            System.out.print("Process P" + process + ": ");
+            for (int resource = 0; resource < numberOfResources; resource++) {
+                maximumMatrix[process][resource] = scanner.nextInt();
+            }
+        }
+
+        // Input available resources
+        System.out.println("Enter Available Resources:");
+        for (int resource = 0; resource < numberOfResources; resource++) {
+            availableResources[resource] = scanner.nextInt();
+        }
+    }
+
+    // Calculate the need matrix
+    private void calculateNeedMatrix() {
+        for (int process = 0; process < numberOfProcesses; process++) {
+            for (int resource = 0; resource < numberOfResources; resource++) {
+                needMatrix[process][resource] = maximumMatrix[process][resource] - allocationMatrix[process][resource];
+            }
+        }
+    }
+
+    // Display resource allocation, maximum, need, and available resources
+    private void displayState() {
+        System.out.println("\nProcess\tAllocation\tMax\t\tNeed\t\tAvailable");
+        for (int process = 0; process < numberOfProcesses; process++) {
+            System.out.print("P" + process + "\t");
+            for (int resource = 0; resource < numberOfResources; resource++) {
+                System.out.print(allocationMatrix[process][resource] + " ");
+            }
+            System.out.print("\t\t");
+            for (int resource = 0; resource < numberOfResources; resource++) {
+                System.out.print(maximumMatrix[process][resource] + " ");
+            }
+            System.out.print("\t\t");
+            for (int resource = 0; resource < numberOfResources; resource++) {
+                System.out.print(needMatrix[process][resource] + " ");
+            }
+            if (process == 0) {
+                System.out.print("\t\t");
+                for (int resource = 0; resource < numberOfResources; resource++) {
+                    System.out.print(availableResources[resource] + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    // Determine if the system is in a safe state
+    private void checkSafety() {
+        boolean[] isProcessCompleted = new boolean[numberOfProcesses];
+        int[] workResources = availableResources.clone();
+        int completedProcesses = 0;
+
+        System.out.println("\nExecution Steps:");
+        while (completedProcesses < numberOfProcesses) {
+            boolean progressMade = false;
+
+            for (int process = 0; process < numberOfProcesses; process++) {
+                if (!isProcessCompleted[process]) {
+                    boolean canExecute = true;
+
+                    for (int resource = 0; resource < numberOfResources; resource++) {
+                        if (needMatrix[process][resource] > workResources[resource]) {
+                            canExecute = false;
+                            break;
+                        }
+                    }
+
+                    if (canExecute) {
+                        for (int resource = 0; resource < numberOfResources; resource++) {
+                            workResources[resource] += allocationMatrix[process][resource];
+                        }
+                        safeSequence[completedProcesses++] = process;
+                        isProcessCompleted[process] = true;
+                        progressMade = true;
+
+                        System.out.print("Process P" + process + " executed. Updated Resources: ");
+                        for (int resource : workResources) {
+                            System.out.print(resource + " ");
+                        }
+                        System.out.println();
+                    }
+                }
+            }
+
+            if (!progressMade) {
+                System.out.println("\nSystem is in an UNSAFE state!");
+                return;
+            }
+        }
+
+        System.out.println("\nSystem is in a SAFE state.");
+        System.out.print("Safe Sequence: ");
+        for (int i = 0; i < numberOfProcesses; i++) {
+            System.out.print("P" + safeSequence[i]);
+            if (i < numberOfProcesses - 1) {
+                System.out.print(" -> ");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        bankers_algo bankersAlgorithm = new bankers_algo();
+
+        bankersAlgorithm.initialize();
+        bankersAlgorithm.calculateNeedMatrix();
+        bankersAlgorithm.displayState();
+        bankersAlgorithm.checkSafety();
+    }
+}
